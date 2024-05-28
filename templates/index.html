@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Shortener</title>
+</head>
+<body onload="init()">
+    <canvas width="512px" height="512px" id="canvas"></canvas>
+    <div id="code-entry">
+        <div id="digit-1" class="digit"></div>
+        <div id="digit-2" class="digit"></div>
+        <div id="digit-3" class="digit"></div>
+        <div id="digit-4" class="digit"></div>
+        <div id="digit-5" class="digit"></div>
+        <div id="digit-6" class="digit"></div>
+    </div>
+    <h3>Have a link to shorten?</h3>
+    <input type="text" id="link-entry" placeholder="Paste your link here">
+</body>
+</html>
+<style>
+    html{
+        font-family: sans-serif;
+        background-color: #000000;
+        color: #dddddd;
+        text-align: center;
+    }
+
+    #code-entry{
+        display: flex;
+        justify-content: center;
+        margin-top: 50px;
+    }
+
+    .digit{
+        width: 10%;
+        height: 200px;
+        background-color: #ffffff30;
+        margin: 10px;
+        border-radius: 8px;
+    }
+
+    #canvas{
+        width: 100%;
+        height: 100%;
+        filter: blur(120px);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+</style>
+<script>
+  function init(){
+    setInterval(initCanvas, 100);
+    setInterval(updateCanvas, 1000/60);
+    initCanvas();
+  }
+
+
+  var circles = [];
+  var current_radius = 80;
+
+  function initCanvas(){
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    for(var i = 0; i < 5; i++){
+      var circle = {
+        x: canvas.width/2,
+        y: canvas.height/2,
+        radius: current_radius,
+        color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+        direction: {
+          x: Math.random() * 2 - 1,
+          y: Math.random() * 2 - 1
+        }
+      }
+
+      circles.unshift(circle);
+    }
+  }
+
+  function updateCanvas(){
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for(var i = 0; i < circles.length; i++){
+      var circle = circles[i];
+
+      circle.x += circle.direction.x * 0.5;
+      circle.y += circle.direction.y * 0.5;
+
+      if(circle.radius > 0.1){
+        circle.radius -= 0.1;
+      }
+      else{
+        circles.splice(i, 1);
+      }
+
+      ctx.beginPath();
+      ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2, false);
+      ctx.fillStyle = circle.color;
+      ctx.fill();
+    }
+  }
+</script>

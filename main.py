@@ -1,19 +1,27 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
+import random
 
 app = Flask(__name__)
 
-LINKS = {123456: "https://google.com"}
+LINKS = {1234: "https://google.com"}
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/go/<int:code>")
+@app.route("/<int:code>")
 def go(code):
     if code in LINKS:
         return redirect(LINKS[code])
     else:
-        return "Link not found"
+        return render_template("created.html", code="Invalid code")
+    
+@app.route("/create", methods=["POST"])
+def add():
+    code = random.randint(1111, 9999)
+    link = request.form["url"]
+    LINKS[code] = link
+    return render_template("created.html", code=code)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0")

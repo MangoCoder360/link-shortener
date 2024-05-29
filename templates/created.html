@@ -7,17 +7,7 @@
 </head>
 <body onload="init()">
     <canvas width="512px" height="512px" id="canvas"></canvas>
-    <div id="code-entry">
-        <div id="digit-1" class="digit"><input id="digit-input-1" class="digit-input" maxlength="1" type="text"></div>
-        <div id="digit-2" class="digit"><input id="digit-input-2" class="digit-input" maxlength="1" type="text"></div>
-        <div id="digit-3" class="digit"><input id="digit-input-3" class="digit-input" maxlength="1" type="text"></div>
-        <div id="digit-4" class="digit"><input id="digit-input-4" class="digit-input" maxlength="1" type="text"></div>
-    </div>
-    <h3>Need a short link?</h3>
-    <form action="/create" method="post">
-        <input type="text" name="url" placeholder="Paste URL here">
-        <button type="submit">Shorten</button>
-    </form>
+    <h1>{{ code }}</h1>
 </body>
 </html>
 <style>
@@ -28,29 +18,8 @@
         text-align: center;
     }
 
-    #code-entry{
-        display: flex;
-        justify-content: center;
-        margin-top: 50px;
-    }
-
-    .digit{
-        width: 20%;
-        height: 200px;
-        background-color: #ffffff30;
-        margin: 10px;
-        border-radius: 8px;
-    }
-
-    .digit-input{
-      width: 100%;
-      height: 100%;
-      font-size: 9em;
-      text-align: center;
-      background-color: transparent;
-      color: #ffffff;
-      border: none;
-      outline: none;
+    h1{
+        font-size: 10em;
     }
 
     #canvas{
@@ -68,24 +37,6 @@
     setInterval(initCanvas, 100);
     setInterval(updateCanvas, 1000/30);
     initCanvas();
-
-    var digitInputs = document.getElementsByClassName('digit-input');
-    digitInputs[0].focus();
-    for(var i = 0; i < digitInputs.length; i++){
-      digitInputs[i].addEventListener('input', function(){
-        var value = this.value;
-        if(value.length > 0){
-          var next = this.parentElement.nextElementSibling;
-          if(next){
-            next.querySelector('.digit-input').focus();
-          }
-          else{
-            var code = Array.from(document.getElementsByClassName('digit-input')).map(d => d.value).join('');
-            location.href = "/" + code;
-          }
-        }
-      });
-    }
   }
 
 
